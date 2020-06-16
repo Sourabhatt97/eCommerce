@@ -1,5 +1,27 @@
 @extends('layouts.app')
 
+@section('head')
+   <meta http-equiv="Content-Type" content="text/html; charset=Western (ISO-8895-1)" />
+    <link rel="stylesheet" type="text/css" href="css/frontend.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+
+    <style>
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+
+        #myform .error
+        {
+            color: red;
+        }
+
+    </style>
+
+@stop
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -8,19 +30,19 @@
                 <div class="card-header">{{ __('Register') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" id = "myform" action="{{ route('register') }}">
                         @csrf
 
                         <div class="form-group row">
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}">
 
                                 @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -29,26 +51,55 @@
                             <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}">
 
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
+                        </div>
+
+<!--                         <div class="form-group row">
+                            <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Phone') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{ old('phone') }}">
+
+                                @error('phone')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div> -->
+
+                        <div class="form-group row">
+                            <label for="gender" class="col-md-4 col-form-label text-md-right"><center>{{ __('Gender ') }}</center></label>  
+                            <div class="col-md-6">
+                                <input type = "radio" name = "gender" value = "Male" Checked> Male<br>
+                                <input type = "radio" name = "gender" value = "Female"> Female<br>
+                                <input type = "radio" name = "gender" value = "Other"> Other<br>
+                            </div>                            
+
+                            @error('gender')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
 
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password">
 
                                 @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                 @enderror
                             </div>
                         </div>
@@ -57,7 +108,7 @@
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
                             </div>
                         </div>
 
@@ -74,4 +125,50 @@
         </div>
     </div>
 </div>
-@endsection
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#myform").validate({
+            rules: 
+            {
+                name:
+                {
+                    required: true
+                },
+                email:
+                {
+                    required: true,
+                    email: true
+                },
+                phone:
+                {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                password:
+                {
+                    required: true,
+                    minlength: 8
+                },
+
+                password_confirmation:
+                {
+                    required: true,
+                    equalTo: "#password"
+                }
+            },
+
+            messages:
+            {
+                name: 'Name is required',
+                email: 'Enter valid email address',
+                phone: 'Enter valid phone number',
+                password: 'Password is required',
+                password_confirmation: 'Both password must be same',
+            },
+        });
+    });
+</script>   
+@stop
