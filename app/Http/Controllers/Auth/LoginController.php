@@ -68,7 +68,7 @@ class LoginController extends Controller
             $name =  $data->name;
             $email = $data->email;
 
-            return view('registration',compact('data'));
+            return view('auth.register',compact('data'));
 /*            $obj = new User;
             
             $obj->name = $data->name;
